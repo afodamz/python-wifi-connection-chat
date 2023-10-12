@@ -46,14 +46,16 @@ try:
         for notified_socket in read_sockets:
             if notified_socket == server_socket:
                 client_socket, clientaddress = server_socket.accept()
+                user = receive_message(client_socket)
 
-                if clientaddress[1] in clients_username:
-                    user = receive_message(client_socket)
+                print('clients_username', clients_username)
+                username = user['data'].decode('utf-8')
+                if username not in clients_username:
                     if user is False:
                         continue
 
                     sockets_list.append(client_socket)
-                    clients_username.append(clientaddress[1])
+                    clients_username.append(username)
 
                     clients[client_socket] = user
 
@@ -67,9 +69,15 @@ try:
             else:
                 message = receive_message(notified_socket)
                 if message is False:
-                    print("closed connection from {}".format(clients[notified_socket]['data'].decode('utf-8')))
+                    userData = clients[notified_socket]['data'].decode('utf-8')
+                    print("closed connection from {}".format(userData))
                     sockets_list.remove(notified_socket)
                     del clients[notified_socket]
+                    clients_username = [x for x in clients_username if x != userData]
+                    rejection_message = f"{userData} has disconnected."
+                    # client_socket.send(rejection_message.encode("utf-8"))
+                    # if value_to_delete in clients_username:
+                    #     my_list.remove(userData)
                     continue
 
                 else:

@@ -36,12 +36,15 @@ username = my_username.encode("utf-8")
 username_header = f"{len(username):<{HEADER_LENGTH}}".encode("utf-8")
 client_socket.send(username_header+username)
 
+message = ""
+
+
 # Function to send messages
 def send_message():
     while True:
-        # message = input(f"{Fore.GREEN}{my_username} > ")
-        message = input(f"{Fore.GREEN} ")
-        print(f"{Fore.GREEN}{my_username} > {message}")
+        message = input(f"{Fore.GREEN}{my_username} > ")
+        # message = input(f"{Fore.GREEN} ")
+        # print(f"{Fore.GREEN}{my_username} > {message}")
 
         if message:
             message = message.encode('utf-8')
@@ -60,11 +63,9 @@ def receive_message():
 
             message_header = client_socket.recv(HEADER_LENGTH)
             message_length = int(message_header.decode('utf-8').strip())
-            message = client_socket.recv(message_length).decode('utf-8')
-
-            print(f"{Fore.BLUE}{username} > {message}")
-            # print(f"{Fore.BLUE}{username} > {message}")
-            # print(f"{Fore.GREEN}{my_username} > ")
+            rcv_message = client_socket.recv(message_length).decode('utf-8')
+            print("\n")
+            print(f"{Fore.BLUE}{username} > {rcv_message}")
         except IOError as IO:
             if IO.errno != errno.EAGAIN and IO.errno != errno.EWOULDBLOCK:
                 print(Fore.RED + 'reading error', str(IO))
