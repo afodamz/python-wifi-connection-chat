@@ -171,3 +171,6 @@ The client code connects to the server, sends messages, and receives and display
 - Ensure your firewall settings allow the specified port.
 - The server must be started before any clients can connect.
 - To gracefully shut down the server, press `Ctrl+C` in the terminal where the server is running.
+
+
+![Alt Text](./example.png)
